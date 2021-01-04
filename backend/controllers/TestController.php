@@ -3,7 +3,7 @@
 /**
  * Контроллер SiteController
  */
-class SiteController
+class TestController
 {
 
     /**
@@ -11,7 +11,7 @@ class SiteController
      */
     public function actionIndex()
     {
-        require_once(APP  . '/views/site/index.php');
+        require_once(APP . '/views/test/index.php');
         return true;
     }
 
@@ -20,7 +20,7 @@ class SiteController
      */
     public function actionAbout()
     {
-        require_once(APP  . '/views/site/about.php');
+        require_once(APP . '/views/test/about.php');
         return true;
     }
 

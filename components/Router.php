@@ -21,7 +21,7 @@ class Router
     public function __construct()
     {
         // Путь к файлу с роутами
-        $routesPath = ROOT . '/config/routes.php';
+        $routesPath = App::$path . '/config/routes.php';
 
         // Получаем роуты из файла
         $this->routes = include($routesPath);
@@ -33,6 +33,11 @@ class Router
     private function getURI()
     {
         if (!empty($_SERVER['REQUEST_URI'])) {
+            $url_request_app = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
+            if(array_key_exists($url_request_app[0], App::$apps) && $url_request_app[0] !== ''){
+                array_shift($url_request_app);
+                return trim(implode('/', $url_request_app), '/');
+            }
             return trim($_SERVER['REQUEST_URI'], '/');
         }
     }
@@ -65,9 +70,8 @@ class Router
                 $parameters = $segments;
 
                 // Подключить файл класса-контроллера
-                $controllerFile = ROOT . '/controllers/' .
+                $controllerFile = App::$path . '/controllers/' .
                         $controllerName . '.php';
-
                 if (file_exists($controllerFile)) {
                     include_once($controllerFile);
                 }

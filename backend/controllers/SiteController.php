@@ -11,7 +11,7 @@ class SiteController
      */
     public function actionIndex()
     {
-        require_once(ROOT . '/views/site/index.php');
+        require_once(APP . '/views/site/index.php');
         return true;
     }
 
@@ -20,7 +20,7 @@ class SiteController
      */
     public function actionAbout()
     {
-        require_once(ROOT . '/views/site/about.php');
+        require_once(APP . '/views/site/about.php');
         return true;
     }
 
