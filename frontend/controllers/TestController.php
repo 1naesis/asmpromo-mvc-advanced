@@ -24,5 +24,24 @@ class TestController
         return true;
     }
 
+    /**
+     * Action для страницы "О компании"
+     */
+    public function actionView($id)
+    {
+        $id = $id;
+        require_once(APP . '/views/test/view.php');
+        return true;
+    }
+
+    /**
+     * Action для страницы "О компании"
+     */
+    public function actionFind($id)
+    {
+        echo $id;
+        echo "Нашел";
+        return true;
+    }
 
 }

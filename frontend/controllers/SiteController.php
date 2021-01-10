@@ -24,5 +24,4 @@ class SiteController
         return true;
     }
 
-
 }

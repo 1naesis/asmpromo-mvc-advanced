@@ -36,10 +36,22 @@ class Router
             $url_request_app = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
             if(array_key_exists($url_request_app[0], App::$apps) && $url_request_app[0] !== ''){
                 array_shift($url_request_app);
-                return trim(implode('/', $url_request_app), '/');
+                return $this->sortURI(trim(implode('/', $url_request_app), '/'));
             }
-            return trim($_SERVER['REQUEST_URI'], '/');
+            return $this->sortURI(trim($_SERVER['REQUEST_URI'], '/'));
         }
+    }
+
+    /**
+     * Метод для удаления параметра из url и добавления параметров в объект приложения
+     */
+    private function sortURI($url)
+    {
+        $uri = explode('?', $url)[0];
+        App::$get = $_GET;
+        App::$post = $_POST;
+        App::$files = $_FILES;
+        return $uri;
     }
 
     /**
@@ -50,16 +62,14 @@ class Router
         // Получаем строку запроса
         $uri = $this->getURI();
 
-        // Проверяем наличие такого запроса в массиве маршрутов (routes.php)
+        // Проверяем наличие запроса в массиве маршрутов (routes.php)
         foreach ($this->routes as $uriPattern => $path) {
-
-            // Сравниваем $uriPattern и $uri
-            if (preg_match("~$uriPattern~", $uri)) {
+            if (preg_match("~^$uriPattern$~", $uri)) {
 
                 // Получаем внутренний путь из внешнего согласно правилу.
                 $internalRoute = preg_replace("~$uriPattern~", $path, $uri);
-                // Определить контроллер, action, параметры
 
+                // Определить контроллер, action, параметры
                 $segments = explode('/', $internalRoute);
 
                 $controllerName = array_shift($segments) . 'Controller';
@@ -68,26 +78,81 @@ class Router
                 $actionName = 'action' . ucfirst(array_shift($segments));
 
                 $parameters = $segments;
-
                 // Подключить файл класса-контроллера
                 $controllerFile = App::$path . '/controllers/' .
-                        $controllerName . '.php';
+                    $controllerName . '.php';
                 if (file_exists($controllerFile)) {
                     include_once($controllerFile);
                 }
+
                 // Создать объект, вызвать метод (т.е. action)
                 $controllerObject = new $controllerName;
 
-                /* Вызываем необходимый метод ($actionName) у определенного 
+                /* Вызываем необходимый метод ($actionName) у определенного
                  * класса ($controllerObject) с заданными ($parameters) параметрами
                  */
                 $result = call_user_func_array(array($controllerObject, $actionName), $parameters);
 
                 // Если метод контроллера успешно вызван, завершаем работу роутера
-                if ($result != null) {
+                if (!isset($result)) {
                     break;
                 }
             }
+        }
+        if (!isset($result)) {
+            $segments = explode('/', $uri);
+            if($this->checkDefaultContoller($segments[0])){
+                $controllerName = 'Site' . 'Controller';
+                $actionName = 'action' . ucfirst(array_shift($segments));
+                $parameters = $segments;
+                $this->useControllerAction($controllerName, $actionName, $parameters);
+            }
+            else{
+                $controllerName = array_shift($segments);
+                if(empty($controllerName)){
+                    $controllerName = ucfirst('site' . 'Controller');
+                }else{
+                    $controllerName = ucfirst($controllerName . 'Controller');
+                }
+                $actionName = 'action' . ucfirst(array_shift($segments));
+                if('action' === $actionName){
+                    $actionName = $actionName.'Index';
+                }
+                $parameters = $segments;
+                $this->useControllerAction($controllerName, $actionName, $parameters);
+            }
+        }
+    }
+
+    /**
+     * Метод для проверки существования экшена в контроллере
+     */
+    public function checkDefaultContoller($segment)
+    {
+        $controllerFile = App::$path . '/controllers/SiteController.php';
+        if (file_exists($controllerFile)) {
+            include_once($controllerFile);
+            $controller = new \SiteController();
+            $action = 'action' . ucfirst($segment);
+            if(method_exists($controller, $action)){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Использование экшенов в контроллере
+     */
+    public function useControllerAction($controller, $action, $parameters)
+    {
+        $controllerFile = App::$path . '/controllers/' . $controller . '.php';
+        if (file_exists($controllerFile)) {
+            include_once($controllerFile);
+            $controllerObject = new $controller;
+            $result = call_user_func_array(array($controllerObject, $action), $parameters);
         }
     }
 

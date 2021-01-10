@@ -14,6 +14,7 @@
  */
 return [
     'admin' => 'backend',
+    'lk' => 'lkpath',
     '' => 'frontend'
 ]
 
