@@ -13,11 +13,22 @@ if(DEV){
 
 //Пути приложения
 define('ROOT', dirname(__FILE__));
-define('APPS', require_once ROOT.'/config/apps.php');
+if(!file_exists(ROOT . '/config/apps.php')){
+    throw new Exception("Ошибка: Отсутствует файл apps.php, по пути '". ROOT . "/config/'");
+}
+define('APPS', require_once ROOT . '/config/apps.php');
+if(!file_exists(ROOT.'/config/config.php')) {
+    throw new Exception("Ошибка: Отсутствует файл config.php, по пути '". ROOT . "/config/'");
+}
+$config = require_once ROOT.'/config/config.php';
 
 require_once(ROOT.'/vendor/autoload.php');
 
-if(!isset(APPS['']))die("Приложение по умолчанию не определено.");
+if(!isset(APPS['']))throw new Exception("Приложение по умолчанию не определено.");
+
+if(isset($config['db'])){
+    App::$db = new $config['db']['dbtype'];
+}
 
 //Определение приложения
 App::$path = ROOT.'/'.APPS[''];
@@ -29,7 +40,7 @@ foreach (APPS as $app_find => $path_find){
         }
     }
 }
-define('APP', App::$path);
+define('APP', App::$path);//ВРОДЕ НЕ НУЖНО, ЕСЛИ НЕ ИСПОЛЬЗУЕТСЯ - УБРАТЬ!
 
 require_once App::$path . '/index.php';
 
