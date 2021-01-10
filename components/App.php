@@ -8,11 +8,12 @@ namespace Component;
  */
 class App
 {
-    static public $path;
-    static public $apps;
-    static public $get;
-    static public $post;
-    static public $files;
+    static public $path = null;
+    static public $apps = null;
+    static public $get = null;
+    static public $post = null;
+    static public $files = null;
+    static public $db = null;
 }
 
 ?>
