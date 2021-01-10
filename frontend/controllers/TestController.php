@@ -1,9 +1,9 @@
 <?php
-
+use Component\Controller;
 /**
- * Контроллер SiteController
+ * Контроллер TestController
  */
-class TestController
+class TestController extends Controller
 {
 
     /**
@@ -11,7 +11,7 @@ class TestController
      */
     public function actionIndex()
     {
-        require_once(APP . '/views/test/index.php');
+        require_once($this->app . '/views/test/index.php');
         return true;
     }
 
@@ -20,7 +20,7 @@ class TestController
      */
     public function actionAbout()
     {
-        require_once(APP . '/views/test/about.php');
+        require_once($this->app . '/views/test/about.php');
         return true;
     }
 

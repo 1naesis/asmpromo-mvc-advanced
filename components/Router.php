@@ -11,7 +11,7 @@ class Router
 
     /**
      * Свойство для хранения массива роутов
-     * @var array 
+     * @var array
      */
     private $routes;
 
@@ -65,36 +65,14 @@ class Router
         // Проверяем наличие запроса в массиве маршрутов (routes.php)
         foreach ($this->routes as $uriPattern => $path) {
             if (preg_match("~^$uriPattern$~", $uri)) {
-
-                // Получаем внутренний путь из внешнего согласно правилу.
                 $internalRoute = preg_replace("~$uriPattern~", $path, $uri);
-
-                // Определить контроллер, action, параметры
                 $segments = explode('/', $internalRoute);
-
                 $controllerName = array_shift($segments) . 'Controller';
                 $controllerName = ucfirst($controllerName);
-
                 $actionName = 'action' . ucfirst(array_shift($segments));
-
                 $parameters = $segments;
-                // Подключить файл класса-контроллера
-                $controllerFile = App::$path . '/controllers/' .
-                    $controllerName . '.php';
-                if (file_exists($controllerFile)) {
-                    include_once($controllerFile);
-                }
-
-                // Создать объект, вызвать метод (т.е. action)
-                $controllerObject = new $controllerName;
-
-                /* Вызываем необходимый метод ($actionName) у определенного
-                 * класса ($controllerObject) с заданными ($parameters) параметрами
-                 */
-                $result = call_user_func_array(array($controllerObject, $actionName), $parameters);
-
-                // Если метод контроллера успешно вызван, завершаем работу роутера
-                if (!isset($result)) {
+                $result = $this->useControllerAction($controllerName, $actionName, $parameters);
+                if ($result) {
                     break;
                 }
             }
@@ -152,8 +130,10 @@ class Router
         if (file_exists($controllerFile)) {
             include_once($controllerFile);
             $controllerObject = new $controller;
-            $result = call_user_func_array(array($controllerObject, $action), $parameters);
+            call_user_func_array(array($controllerObject, $action), $parameters);
+            return true;
         }
+        return false;
     }
 
 }

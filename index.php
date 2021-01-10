@@ -1,6 +1,7 @@
 <?php
 
 use Component\App;
+use Component\Db;
 use Component\Router;
 
 //Режим разработчика
@@ -28,7 +29,11 @@ if(!isset(APPS['']))throw new Exception("Приложение по умолча�
 
 if(isset($config['db'])){
     App::$db = new $config['db']['dbtype'];
+    App::$db::setup( 'mysql:host='.$config['db']['dbhost'].';dbname='.$config['db']['dbname'],$config['db']['dbuser'], $config['db']['dbpassword'], false);
+
+    if(!App::$db::testConnection()) throw new Exception("Проблемы с подключением к базе данных.");
 }
+
 
 //Определение приложения
 App::$path = ROOT.'/'.APPS[''];

@@ -1,4 +1,4 @@
-<?php include APP . '/views/layouts/header.php'; ?>
+<?php include $this->app . '/views/layouts/header.php'; ?>
     <h1>Тест</h1>
     <h2>Главная</h2>
-<?php include APP . '/views/layouts/footer.php'; ?>
+<?php include $this->app . '/views/layouts/footer.php'; ?>
