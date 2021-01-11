@@ -1,5 +1,7 @@
 <?php
 use Component\Controller;
+use frontend\models\Users;
+
 /**
  * Контроллер SiteController
  */

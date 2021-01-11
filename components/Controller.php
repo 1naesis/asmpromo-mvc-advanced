@@ -14,6 +14,9 @@ class Controller
     {
         $this->app = App::$path;
     }
+    protected function render(){
+
+    }
 }
 
 ?>

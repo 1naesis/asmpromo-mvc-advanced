@@ -2,7 +2,6 @@
 
 use Component\App;
 use Component\Db;
-use Component\Router;
 
 //Режим разработчика
 define('DEV', true);
@@ -43,12 +42,18 @@ foreach (APPS as $app_find => $path_find){
         if(explode('/', $_SERVER["REQUEST_URI"])[1] === $app_find){
             App::$path = ROOT.'/'.$path_find;
         }
+
+        //Подключение всех моделей
+        foreach (scandir($path_find . '/models/') as $model){
+            if(2 < strlen($model) && file_exists(ROOT.'/'.$path_find . '/models/' . $model)){
+                require_once ROOT.'/'.$path_find . '/models/' . $model;
+            }
+        }
     }
 }
-define('APP', App::$path);//ВРОДЕ НЕ НУЖНО, ЕСЛИ НЕ ИСПОЛЬЗУЕТСЯ - УБРАТЬ!
+
+//define('APP', App::$path);//ИСПОЛЬЗУЕТСЯ В НЕКОТОРЫХ КОНТРОЛЛЕРАХ И ВЬЮШКАХ, МОЖНО ЗАМЕНИТЬ НА App:$path
 
 require_once App::$path . '/index.php';
 
-// Вызов Router
-$router = new Router();
-$router->run();
+App::run();
