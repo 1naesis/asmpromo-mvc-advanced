@@ -9,7 +9,7 @@
             "role": "Developer"
         }
     ],
-    "minimum-stability": "dev-#1",
+    "minimum-stability": "dev-main",
     "prefer-stable": true,
     "require": {
         "php" : ">=7.0",
