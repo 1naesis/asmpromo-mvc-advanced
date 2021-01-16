@@ -9,7 +9,8 @@
             "role": "Developer"
         }
     ],
-    "minimum-stability": "dev-main",
+    "minimum-stability": "dev-#1",
+    "prefer-stable": true,
     "require": {
         "php" : ">=7.0",
         "gabordemooij/redbean": "dev-master"
