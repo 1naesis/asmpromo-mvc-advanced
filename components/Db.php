@@ -30,11 +30,11 @@ class Db
         }
     }
 
-    public function connecting()
+    private function connecting()
     {
         $this->db = new $this->dbtype;
-        $this->db::setup( 'mysql:host='.$this->dbhost.';dbname='.$this->dbname,$this->dbuser, $this->dbpassword, false);
-        if($this->db::testConnection()){
+        $this->db->setup( 'mysql:host='.$this->dbhost.';dbname='.$this->dbname,$this->dbuser, $this->dbpassword, false);
+        if($this->db->testConnection()){
             return true;
         }
         return false;
@@ -42,21 +42,21 @@ class Db
 
     public function findAll($type, $sql = NULL, $bindings = array())
     {
-        return $this->db::findAll($type, $sql, $bindings);
+        return $this->db->findAll($type, $sql, $bindings);
     }
 
     public function findOne($type, $sql = NULL, $bindings = array())
     {
-        return $this->db::findOne($type, $sql, $bindings);
+        return $this->db->findOne($type, $sql, $bindings);
     }
 
-    public function load($type, $id)
+    public function load($type, $id = NULL)
     {
-        return $this->db::load($type, $id);
+        return $this->db->load($type, $id);
     }
 
     public function count($type, $sql = NULL, $bindings = array())
     {
-        return count($this->db::findAll($type, $sql, $bindings));
+        return count($this->db->findAll($type, $sql, $bindings));
     }
 }
