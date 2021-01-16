@@ -1,5 +1,5 @@
 # asmpromo-mvc-advanced
 Установка через композер:<br>
 <code>
-composer composer create-project asmpromo/mvc-advanced:dev-main
+composer create-project asmpromo/mvc-advanced:dev-main
 </code>
