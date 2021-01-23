@@ -17,46 +17,84 @@ class Db
 
     public function __construct()
     {
-        $this->test = App::$config;
+        $this->db = App::$config;
         if (isset(App::$config['db']) && !empty(App::$config['db']['dbtype'])) {
             $this->dbtype = App::$config['db']['dbtype'];
             $this->dbhost = App::$config['db']['dbhost'];
             $this->dbname = App::$config['db']['dbname'];
             $this->dbuser = App::$config['db']['dbuser'];
             $this->dbpassword = App::$config['db']['dbpassword'];
-            if(!$this->connecting()){
-                throw new \Exception("Ошибка: Проблема с подключением к базе данных!");
-            }
+            $this->dbcharset =  App::$config['db']['dbcharset'];
+            self::connecting();
         }
     }
 
     private function connecting()
     {
-        $this->db = new $this->dbtype;
-        $this->db->setup( 'mysql:host='.$this->dbhost.';dbname='.$this->dbname,$this->dbuser, $this->dbpassword, false);
-        if($this->db->testConnection()){
-            return true;
+        $dsn = "mysql:host=$this->dbhost;dbname=$this->dbname;charset=$this->dbcharset";
+        $opt = [
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES   => false,
+        ];
+
+        try {
+            $this->db  = new PDO($dsn, $this->dbuser, $this->dbpassword, $opt);
+        } catch (PDOException $e) {
+            print "Error!: " . $e->getMessage();
+            die();
         }
-        return false;
     }
 
-    public function findAll($type, $sql = NULL, $bindings = array())
+    public function findAll($sql = NULL, $bindings = array())
     {
-        return $this->db->findAll($type, $sql, $bindings);
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($bindings);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function findOne($type, $sql = NULL, $bindings = array())
+    public function findOne($sql = NULL, $bindings = array())
     {
-        return $this->db->findOne($type, $sql, $bindings);
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($bindings);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function load($type, $id = NULL)
+    public function insert($sql = NULL, $bindings = array())
     {
-        return $this->db->load($type, $id);
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($bindings);
+
+        return $this->db->lastInsertId();
+
     }
+
+    public function update($sql = NULL, $bindings = array())
+    {
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($bindings);
+
+        return true;
+
+    }
+
+    public function delete($sql = NULL, $bindings = array())
+    {
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($bindings);
+
+        return true;
+
+    }
+
+
 
     public function count($type, $sql = NULL, $bindings = array())
     {
-        return count($this->db->findAll($type, $sql, $bindings));
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($bindings);
+        return count($stmt);
     }
 }

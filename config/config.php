@@ -5,11 +5,12 @@
  */
 return [
     'db' => [
-        'dbtype' => '\RedBeanPHP\R',
+        'dbtype' => 'PDO',
         'dbhost' => 'localhost',
         'dbname' => '',
         'dbuser' => 'root',
-        'dbpassword' => 'root'
+        'dbpassword' => 'root',
+        'dbcharset' => 'utf8'
     ]
 ]
 ?>
