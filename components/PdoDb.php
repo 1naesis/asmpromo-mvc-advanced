@@ -16,6 +16,7 @@ class PdoDb
 
         try {
             self::$db = new $db_config['dbtype']($dsn, $db_config['dbuser'], $db_config['dbpassword'], $opt);
+            return new PdoDb();
         } catch (PDOException $e) {
             print "Error!: " . $e->getMessage();
             die();
@@ -27,7 +28,7 @@ class PdoDb
         $stmt = self::$db->prepare($sql);
         $stmt->execute($bindings);
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll();
     }
 
     public function findOne($sql = NULL, $bindings = array())

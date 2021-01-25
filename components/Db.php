@@ -12,15 +12,15 @@ class Db
 {
     private static $db_config = [];
 
-    public function init(){
+    public static function init(){
 
         if (isset(App::$config['db']) && !empty(App::$config['db']['dbtype'])) {
             self::$db_config = App::$config['db'];
 
             if(self::$db_config['dbtype'] == 'PDO'){
-                return PdoDb::connecting();
+                return PdoDb::connecting(self::$db_config);
             }elseif(self::$db_config['dbtype'] == '\RedBeanPHP\R'){
-                return RedbeanDb::connecting();
+                return RedbeanDb::connecting(self::$db_config);
             }
         }
     }
