@@ -1,5 +1,6 @@
 <?php
 use Component\Controller;
+use Component\Db;
 /**
  * Контроллер TestController
  */
@@ -11,6 +12,10 @@ class TestController extends Controller
      */
     public function actionIndex()
     {
+        $db = Db::init();
+        $sql = "SELECT * FROM product";
+        $array = [];
+        $product = $db->findAll($sql,$array);
         require_once($this->app . '/views/test/index.php');
         return true;
     }
