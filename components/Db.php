@@ -11,8 +11,15 @@ use Component\PdoDb;
 class Db
 {
     private static $db_config = [];
+    private static $db;
+    public static function findAll($sql,$bindings){
+        if(!self::$db){
+            self::init();
+        }
+        self::$db->findAll($sql,$bindings);
+    }
 
-    public static function init(){
+    private static function init(){
 
         if (isset(App::$config['db']) && !empty(App::$config['db']['dbtype'])) {
             self::$db_config = App::$config['db'];
@@ -24,4 +31,5 @@ class Db
             }
         }
     }
+    
 }
