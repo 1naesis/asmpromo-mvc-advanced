@@ -12,11 +12,18 @@ class Db
 {
     private static $db_config = [];
     private static $db;
-    public static function findAll($sql,$bindings){
+//     public static function findAll($sql,$bindings){
+//         if(!self::$db){
+//             self::init();
+//         }
+//         self::$db->findAll($sql,$bindings);
+//     }
+    
+    public function __call($name, $arguments) {
         if(!self::$db){
             self::init();
         }
-        self::$db->findAll($sql,$bindings);
+         self::$db->$name($arguments);
     }
 
     private static function init(){
