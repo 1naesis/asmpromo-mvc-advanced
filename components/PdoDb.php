@@ -23,12 +23,12 @@ class PdoDb
         }
     }
 
-    public function findAll($sql = NULL, $bindings = array())
-    {
-        $stmt = self::$db->prepare($sql);
-        $stmt->execute($bindings);
+    public function findAll($arguments)
+    {   
+        $stmt = self::$db->prepare($arguments[0]);
+        $stmt->execute($arguments[1]);
 
-        return $stmt->fetchAll();
+        $stmt->fetchAll();
     }
 
     public function findOne($sql = NULL, $bindings = array())
