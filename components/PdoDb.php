@@ -28,7 +28,7 @@ class PdoDb
         $stmt = self::$db->prepare($arguments[0]);
         $stmt->execute($arguments[1]);
 
-        $stmt->fetchAll();
+        return $stmt->fetchAll();
     }
 
     public function findOne($sql = NULL, $bindings = array())
