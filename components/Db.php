@@ -12,18 +12,12 @@ class Db
 {
     private static $db_config = [];
     private static $db;
-//     public static function findAll($sql,$bindings){
-//         if(!self::$db){
-//             self::init();
-//         }
-//         self::$db->findAll($sql,$bindings);
-//     }
     
-    public function __call($name, $arguments) {
+    public function __callStatic($name, $arguments) {
         if(!self::$db){
-            self::init();
+            self::$db = self::init();
         }
-         self::$db->$name($arguments);
+         return self::$db->$name($arguments);
     }
 
     private static function init(){
@@ -32,7 +26,7 @@ class Db
             self::$db_config = App::$config['db'];
 
             if(self::$db_config['dbtype'] == 'PDO'){
-                return PdoDb::connecting(self::$db_config);
+               return PdoDb::connecting(self::$db_config);
             }elseif(self::$db_config['dbtype'] == '\RedBeanPHP\R'){
                 return RedbeanDb::connecting(self::$db_config);
             }
