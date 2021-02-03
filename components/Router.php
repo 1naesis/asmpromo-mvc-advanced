@@ -34,6 +34,7 @@ class Router
     {
         if (!empty($_SERVER['REQUEST_URI'])) {
             $url_request_app = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
+            
             if(array_key_exists($url_request_app[0], App::$apps) && $url_request_app[0] !== ''){
                 array_shift($url_request_app);
                 return $this->sortURI(trim(implode('/', $url_request_app), '/'));
@@ -62,6 +63,9 @@ class Router
         // Получаем строку запроса
         $uri = $this->getURI();
 
+        // Найдена ли страница
+        $found = false;
+
         // Проверяем наличие запроса в массиве маршрутов (routes.php)
         foreach ($this->routes as $uriPattern => $path) {
             if (preg_match("~^$uriPattern$~", $uri)) {
@@ -77,13 +81,15 @@ class Router
                 }
             }
         }
+
+        // Поиск методов по контроллерам
         if (!isset($result)) {
             $segments = explode('/', $uri);
             if($this->checkDefaultContoller($segments[0])){
                 $controllerName = 'Site' . 'Controller';
                 $actionName = 'action' . ucfirst(array_shift($segments));
                 $parameters = $segments;
-                $this->useControllerAction($controllerName, $actionName, $parameters);
+                $found = $this->useControllerAction($controllerName, $actionName, $parameters);
             }
             else{
                 $controllerName = array_shift($segments);
@@ -97,8 +103,15 @@ class Router
                     $actionName = $actionName.'Index';
                 }
                 $parameters = $segments;
-                $this->useControllerAction($controllerName, $actionName, $parameters);
+                $found = $this->useControllerAction($controllerName, $actionName, $parameters);
             }
+        }
+
+        // Вызов экшена 404
+        if(!$found){
+            $controllerName = 'Site' . 'Controller';
+            $actionName = 'action404';
+            $this->useControllerAction($controllerName, $actionName);
         }
     }
 
@@ -111,7 +124,14 @@ class Router
         if (file_exists($controllerFile)) {
             include_once($controllerFile);
             $controller = new \SiteController();
-            $action = 'action' . ucfirst($segment);
+
+            $tmp_segment = explode('-', $segment);
+            foreach ($tmp_segment as &$tml_s){
+                $tml_s = ucfirst($tml_s);
+            }
+            $segment = implode("", $tmp_segment);
+
+            $action = 'action' . $segment;
             if(method_exists($controller, $action)){
                 return true;
             }else{
@@ -124,8 +144,18 @@ class Router
     /**
      * Использование экшенов в контроллере
      */
-    public function useControllerAction($controller, $action, $parameters)
+    public function useControllerAction($controller, $action, $parameters = [])
     {
+        $action_name = mb_strtolower(mb_substr($action, 6));
+        App::$controller = mb_strtolower(mb_substr($controller, 0, -10));
+        App::$action = mb_strtolower($action_name);
+        $tmp_action = explode('-', $action_name);
+        foreach ($tmp_action as &$tml_s){
+            $tml_s = ucfirst($tml_s);
+        }
+        $tmp_action = implode("", $tmp_action);
+        $action = 'action'.$tmp_action;
+
         $controllerFile = App::$path . '/controllers/' . $controller . '.php';
         if (file_exists($controllerFile)) {
             include_once($controllerFile);

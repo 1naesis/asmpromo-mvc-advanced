@@ -3,6 +3,7 @@
 namespace Component;
 
 use Component\Router;
+use Component\User;
 
 /**
  * Класс App
@@ -13,10 +14,13 @@ class App
     static public $root = null;
     static public $path = null;
     static public $apps = null;
+    static public $user = null;
     static public $get = null;
     static public $post = null;
     static public $files = null;
     static public $config = null;
+    static public $action = null;
+    static public $controller = null;
 
     /**
      * Запуск приложения
@@ -26,6 +30,7 @@ class App
         self::includeConfig();
         self::includePath();
         require_once self::$path . '/index.php';
+        self::$user = new User();
         $router = new Router();
         $router->run();
     }
