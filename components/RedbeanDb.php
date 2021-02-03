@@ -15,28 +15,28 @@ class RedbeanDb{
 
     public function findAll($arguments)
     {
-        return self::$db::getAll($arguments[0], [$arguments[1]]);
+        return self::$db::getAll($arguments[0], $arguments[1]);
     }
 
     public function findOne($arguments)
     {
-        return self::$db::getRow($arguments[0], [$arguments[1]]);
+        return self::$db::getRow($arguments[0], $arguments[1]);
     }
 
     public function insert($arguments)
     {
-        return self::$db::exec($arguments[0], [$arguments[1]]);
+        return self::$db::exec($arguments[0], $arguments[1]);
     }
 
     public function update($arguments)
     {
-        return self::$db::exec($arguments[0], [$arguments[1]]);
+        return self::$db::exec($arguments[0], $arguments[1]);
 
     }
 
     public function delete($arguments)
     {
-        return self::$db::exec($arguments[0], [$arguments[1]]);
+        return self::$db::exec($arguments[0], $arguments[1]);
 
     }
 
