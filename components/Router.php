@@ -75,15 +75,15 @@ class Router
                 $controllerName = ucfirst($controllerName);
                 $actionName = 'action' . ucfirst(array_shift($segments));
                 $parameters = $segments;
-                $result = $this->useControllerAction($controllerName, $actionName, $parameters);
-                if ($result) {
+                $found = $this->useControllerAction($controllerName, $actionName, $parameters);
+                if ($found) {
                     break;
                 }
             }
         }
 
         // Поиск методов по контроллерам
-        if (!isset($result)) {
+        if (!$found) {
             $segments = explode('/', $uri);
             if($this->checkDefaultContoller($segments[0])){
                 $controllerName = 'Site' . 'Controller';
