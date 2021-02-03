@@ -5,7 +5,7 @@
  */
 return [
     'db' => [
-        'dbtype' => 'PDO',
+        'dbtype' => '\RedBeanPHP\R',
         'dbhost' => 'localhost',
         'dbname' => '',
         'dbuser' => 'root',

@@ -31,33 +31,33 @@ class PdoDb
         return $stmt->fetchAll();
     }
 
-    public function findOne($sql = NULL, $bindings = array())
+    public function findOne($arguments)
     {
-        $stmt = self::$db->prepare($sql);
-        $stmt->execute($bindings);
+        $stmt = self::$db->prepare($arguments[0]);
+        $stmt->execute($arguments[1]);
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function insert($sql = NULL, $bindings = array())
+    public function insert($arguments)
     {
-        $stmt = self::$db->prepare($sql);
-        $stmt->execute($bindings);
+        $stmt = self::$db->prepare($arguments[0]);
+        $stmt->execute($arguments[1]);
 
         return self::$db->lastInsertId();
 
     }
 
-    public function update($sql = NULL, $bindings = array())
+    public function update($arguments)
     {
-        $stmt = self::$db->prepare($sql);
-        $stmt->execute($bindings);
+        $stmt = self::$db->prepare($arguments[0]);
+        $stmt->execute($arguments[1]);
 
     }
 
-    public function delete($sql = NULL, $bindings = array())
+    public function delete($arguments)
     {
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute($bindings);
+        $stmt = $this->db->prepare($arguments[0]);
+        $stmt->execute($arguments[1]);
     }
 }
