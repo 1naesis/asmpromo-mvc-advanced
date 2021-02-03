@@ -29,7 +29,8 @@ abstract class Controller
      */
     protected function render($view, $parameters = []){
         if(!$this->checkBehavior()){
-            header('Location: /');
+            $app = array_search($this->app, App::$apps);
+            header('Location: /'.$app);
         }
 
         extract($parameters, EXTR_SKIP);
