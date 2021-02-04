@@ -7,7 +7,7 @@ use PHPMailer\PHPMailer\Exception;
 
 class Mail{
 
-    public function send($email,$file,$title,$body){
+    public function send($email,$file=null,$title,$body){
         // Instantiation and passing `true` enables exceptions
         $mail = new PHPMailer(true);
 
