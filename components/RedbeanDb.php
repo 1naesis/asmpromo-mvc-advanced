@@ -5,7 +5,7 @@ class RedbeanDb{
     public static $db;
     public static function connecting($db_config)
     {
-        $db_config['dbtype']::setup('mysql:host='.$db_config['dbhost'].';dbname='.$db_config['dbname'].', '.$db_config['dbuser'].', '.$db_config['dbpassword']);
+        $db_config['dbtype']::setup('mysql:host='.$db_config['dbhost'].';dbname='.$db_config['dbname'], $db_config['dbuser'],$db_config['dbpassword']);
         $db = $db_config['dbtype'];
         if(!$db_config['dbtype']::testConnection()){
             throw new \Exception("Ошибка: Проблема с подключением к базе данных!");
