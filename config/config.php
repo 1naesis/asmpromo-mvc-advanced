@@ -11,6 +11,7 @@ return [
         'dbuser' => 'root',
         'dbpassword' => 'root',
         'dbcharset' => 'utf8'
-    ]
+    ],
+
 ]
 ?>

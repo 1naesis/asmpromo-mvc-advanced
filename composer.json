@@ -11,7 +11,9 @@
     ],
     "require": {
         "php" : ">=7.0",
-        "gabordemooij/redbean": "dev-master"
+        "gabordemooij/redbean": "dev-master",
+        "phpmailer/phpmailer": "dev-master"
+
     },
     "autoload": {
         "psr-4": {"Component\\": "components/"}
