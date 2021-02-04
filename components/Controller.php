@@ -2,6 +2,7 @@
 
 namespace Component;
 
+use Component\AssetsBasic;
 
 /**
  * Класс Controller
