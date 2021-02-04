@@ -6,7 +6,7 @@
  */
 class Asset
 {
-    public static $path = '/frontend/assets';
+    public static $path = '/backend/assets';
     public static $css = [
         '/css/main.css'
     ];
