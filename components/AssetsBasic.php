@@ -11,6 +11,7 @@ class AssetsBasic
     private static $path = null;
     private static $css = null;
     private static $js = null;
+    private static $suffix = '';
 
     /**
      * Подключение стилий
@@ -20,8 +21,9 @@ class AssetsBasic
         if(!self::$css){
             self::includeAsset();
         }
+
         foreach (self::$css as $css){
-            echo '<link rel="stylesheet" href="' . self::$path . $css . '" />'.PHP_EOL;
+            echo '<link rel="stylesheet" href="' . self::$path . $css . self::$suffix .'" />'.PHP_EOL;
         }
     }
 
@@ -34,7 +36,7 @@ class AssetsBasic
             self::includeAsset();
         }
         foreach (self::$js as $js){
-            echo '<script src="' . self::$path . $js . '"></script>'.PHP_EOL;
+            echo '<script src="' . self::$path . $js . self::$suffix .'"></script>'.PHP_EOL;
         }
     }
 
@@ -50,6 +52,9 @@ class AssetsBasic
             self::$css = \Asset::$css;
             self::$js = \Asset::$js;
             self::$path = \Asset::$path;
+            if(DEV){
+                self::$suffix = '?'.time();
+            }
         }
     }
 }
