@@ -21,7 +21,6 @@ class AssetsBasic
         if(!self::$css){
             self::includeAsset();
         }
-
         foreach (self::$css as $css){
             echo '<link rel="stylesheet" href="' . self::$path . $css . self::$suffix .'" />'.PHP_EOL;
         }
@@ -35,6 +34,7 @@ class AssetsBasic
         if(!self::$js){
             self::includeAsset();
         }
+        echo '<script src="/common/assets/asm.js' . self::$suffix .'"></script>'.PHP_EOL;
         foreach (self::$js as $js){
             echo '<script src="' . self::$path . $js . self::$suffix .'"></script>'.PHP_EOL;
         }

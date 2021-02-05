@@ -60,6 +60,11 @@ class Router
      */
     public function run()
     {
+        // Проверка CSRF
+        if(!$this->validationCSRF()){
+            throw new \Exception("Не пройдена верификация.");
+        }
+
         // Получаем строку запроса
         $uri = $this->getURI();
 
@@ -164,6 +169,17 @@ class Router
             return true;
         }
         return false;
+    }
+
+    /**
+     * Проверка CSRF
+     */
+    private function validationCSRF()
+    {
+        if(count($_POST) > 0 && !Csrf::checkCsrf()){
+            return false;
+        }
+        return true;
     }
 
 }

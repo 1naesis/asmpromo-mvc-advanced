@@ -47,11 +47,13 @@ class App
         if(!isset($apps['']))throw new \Exception("Приложение по умолчанию не определено.");
 
         self::$path = ROOT.'/'.$apps[''];
+        self::$root = '/'.$apps[''];
         foreach ($apps as $app_find => $path_find){
             if(file_exists(ROOT.'/'.$path_find)){
                 self::$apps[$app_find] = ROOT.'/'.$path_find;
                 if(explode('/', $_SERVER["REQUEST_URI"])[1] === $app_find){
                     self::$path = ROOT.'/'.$path_find;
+                    self::$root = '/'.$path_find;
                 }
 
                 //Подключение всех моделей

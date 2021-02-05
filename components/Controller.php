@@ -35,10 +35,13 @@ abstract class Controller
 
         extract($parameters, EXTR_SKIP);
 
+        $_SERVER["DOCUMENT_ROOT"] = App::$root . '/assets';
         if($this->header && file_exists($this->app.'/views/layouts/'.$this->header.'.php')){
             require_once $this->app.'/views/layouts/'.$this->header.'.php';
         }
         require_once $this->app.'/views/'.App::$controller.'/'.$view.'.php';
+
+        echo Csrf::registerCsrf();
 
         if($this->footer && file_exists($this->app.'/views/layouts/'.$this->footer.'.php')){
             require_once $this->app.'/views/layouts/'.$this->footer.'.php';
@@ -57,7 +60,7 @@ abstract class Controller
     /**
      * render генерация html для любого контроллера
      */
-    private function checkBehavior(){
+    protected function checkBehavior(){
         if(method_exists($this, 'behaviors')){
             $behaviors = $this->behaviors();
             $status = App::$user->status;
