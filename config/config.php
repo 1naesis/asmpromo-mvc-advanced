@@ -11,6 +11,10 @@ return [
         'dbuser' => 'root',
         'dbpassword' => 'root',
         'dbcharset' => 'utf8'
+    ],
+    'csrf-whitelist' => [
+        'tests',
+        'test'
     ]
 ]
 ?>

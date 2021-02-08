@@ -11,6 +11,7 @@ use Component\User;
  */
 class App
 {
+    static public $url = null;
     static public $root = null;
     static public $path = null;
     static public $apps = null;

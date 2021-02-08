@@ -36,6 +36,9 @@ abstract class Csrf
         if(isset($_POST["asm-csrf-sec"]) && isset($_SESSION["asm-csrf-sec"]) && $_POST["asm-csrf-sec"] === $_SESSION["asm-csrf-sec"]){
             return true;
         }
+        if(in_array(App::$url, App::$config['csrf-whitelist'])){
+            return true;
+        }
         return false;
     }
 

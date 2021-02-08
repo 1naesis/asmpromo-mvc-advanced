@@ -49,6 +49,7 @@ class Router
     private function sortURI($url)
     {
         $uri = explode('?', $url)[0];
+        App::$url = $uri;
         App::$get = $_GET;
         App::$post = $_POST;
         App::$files = $_FILES;
@@ -60,13 +61,14 @@ class Router
      */
     public function run()
     {
+
+        // Получаем строку запроса
+        $uri = $this->getURI();
+
         // Проверка CSRF
         if(!$this->validationCSRF()){
             throw new \Exception("Не пройдена верификация.");
         }
-
-        // Получаем строку запроса
-        $uri = $this->getURI();
 
         // Найдена ли страница
         $found = false;
