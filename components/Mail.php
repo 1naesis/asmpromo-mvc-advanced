@@ -1,29 +1,34 @@
 <?php
+
 namespace Component;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-class Mail{
+class Mail
+{
 
-    public static function send($email,$title,$body,$file=null){
+    public static function send(array $email, $title, $body, $file = null)
+    {
         // Instantiation and passing `true` enables exceptions
         $mail = new PHPMailer(true);
 
         try {
             //Server settings
-            $mail->Host = 'smtp.beget.com'; // SMTP сервера вашей почты
-            $mail->Username = 'beget@work-side.ru'; // Логин на почте
-            $mail->Password = 'beget_123'; // Пароль на почте
-            $mail->SMTPSecure = 'ssl';
-            $mail->Port = 465;
+            $mail->Host = App::$config['mail']['host']; // SMTP сервера вашей почты
+            $mail->Username = App::$config['mail']['username']; // Логин на почте
+            $mail->Password = App::$config['mail']['password']; // Пароль на почте
+            $mail->SMTPSecure = App::$config['mail']['smtpsecure'];
+            $mail->Port = App::$config['mail']['port'];
 
             //От кого
-            $mail->setFrom('beget@work-side.ru', 'Asmpromo');
-
+            $mail->setFrom(App::$config['mail']['username'], App::$config['mail']['from']);
             //Кому
-            $mail->addAddress($email);
+            foreach ($email as $item) {
+                $mail->addAddress($item);
+            }
+
 
             if (!empty($file['name'][0])) {
                 if (count($file['tmp_name']) == 1) {
@@ -65,7 +70,7 @@ class Mail{
             // Content
             $mail->isHTML(true);                                  // Set email format to HTML
             $mail->Subject = $title;//Тема письма
-            $mail->Body    = $body;
+            $mail->Body = $body;
 
             if ($mail->send()) {
                 $result = "success";
