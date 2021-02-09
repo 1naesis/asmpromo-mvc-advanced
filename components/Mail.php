@@ -22,6 +22,8 @@ class Mail
             $mail->SMTPSecure = App::$config['mail']['smtpsecure'];
             $mail->Port = App::$config['mail']['port'];
 
+            $mail->CharSet = 'UTF-8';
+
             //От кого
             $mail->setFrom(App::$config['mail']['username'], App::$config['mail']['from']);
             //Кому
