@@ -12,9 +12,21 @@ return [
         'dbpassword' => 'root',
         'dbcharset' => 'utf8'
     ],
+
     'csrf-whitelist' => [
         'tests',
         'test'
+    ],
+
+    'mail' => [
+        'host' => 'smtp.beget.com',
+        'username' => 'beget@work-side.ru',
+        'password' => 'beget_123',
+        'smtpsecure' => 'ssl',
+        'port' => '465',
+        'from' => 'Asmpromo'
+
     ]
+
 ]
 ?>
