@@ -14,6 +14,20 @@ class AssetsBasic
     private static $suffix = '';
 
     /**
+     * Подключение favicon
+     */
+    public static function getFavicon($path = '')
+    {
+        if($path === ''){
+            $path = self::$path.'/favicon.png';
+            if(!file_exists(ROOT.$path)){
+                $path = '/favicon.png';
+            }
+        }
+        echo '<link rel="shortcut icon" href="'.$path.'" type="image/png">';
+    }
+
+    /**
      * Подключение стилий
      */
     public static function getCss()

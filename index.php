@@ -1,4 +1,8 @@
 <?php
+if($_SERVER["REQUEST_URI"] === '/doc'){
+    echo file_get_contents("./doc.php");
+    exit;
+}
 
 use Component\App;
 

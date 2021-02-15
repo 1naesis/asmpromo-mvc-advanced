@@ -15,7 +15,8 @@ return [
 
     'csrf-whitelist' => [
         'tests',
-        'test'
+        'test',
+        'login'
     ],
 
     'mail' => [
