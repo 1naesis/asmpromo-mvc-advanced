@@ -16,6 +16,6 @@
 
     },
     "autoload": {
-        "psr-4": {"Component\\": "components/"}
+        "psr-4": {"Component\\": "components"}
     }
 }
