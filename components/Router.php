@@ -167,8 +167,15 @@ class Router
         if (file_exists($controllerFile)) {
             include_once($controllerFile);
             $controllerObject = new $controller;
-            call_user_func_array(array($controllerObject, $action), $parameters);
-            return true;
+            if(method_exists($controllerObject, $action)){
+                call_user_func_array(array($controllerObject, $action), $parameters);
+                return true;
+            }
+            if(method_exists($controllerObject, "action404")){
+                call_user_func_array(array($controllerObject, "action404"), $parameters);
+                return true;
+            }
+            return false;
         }
         return false;
     }
