@@ -13,10 +13,8 @@ return [
         'dbcharset' => 'utf8'
     ],
 
-    'csrf-whitelist' => [
-        'tests',
-        'test',
-        'login'
+    'csrf-enable' => [
+
     ],
 
     'mail' => [
