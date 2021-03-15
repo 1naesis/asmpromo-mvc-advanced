@@ -1,4 +1,5 @@
 <?php
+
 namespace Component;
 
 class PdoDb
@@ -7,11 +8,11 @@ class PdoDb
 
     public static function connecting($db_config)
     {
-        $dsn = "mysql:host=".$db_config['dbhost'].";dbname=".$db_config['dbname'].";charset=".$db_config['dbcharset'];
+        $dsn = "mysql:host=" . $db_config['dbhost'] . ";dbname=" . $db_config['dbname'] . ";charset=" . $db_config['dbcharset'];
         $opt = [
-            $db_config['dbtype']::ATTR_ERRMODE            => $db_config['dbtype']::ERRMODE_EXCEPTION,
+            $db_config['dbtype']::ATTR_ERRMODE => $db_config['dbtype']::ERRMODE_EXCEPTION,
             $db_config['dbtype']::ATTR_DEFAULT_FETCH_MODE => $db_config['dbtype']::FETCH_ASSOC,
-            $db_config['dbtype']::ATTR_EMULATE_PREPARES   => false,
+            $db_config['dbtype']::ATTR_EMULATE_PREPARES => false,
         ];
 
         try {
@@ -24,7 +25,7 @@ class PdoDb
     }
 
     public function findAll($arguments)
-    {   
+    {
         $stmt = self::$db->prepare($arguments[0]);
         $stmt->execute($arguments[1]);
 
@@ -36,12 +37,16 @@ class PdoDb
         $stmt = self::$db->prepare($arguments[0]);
         $stmt->execute($arguments[1]);
 
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt->fetch();
     }
 
     public function insert($arguments)
     {
         $stmt = self::$db->prepare($arguments[0]);
+        foreach ($arguments[1] as $key => $item) {
+            $stmt->bindParam(':' . $key, $item);
+        }
+
         $stmt->execute($arguments[1]);
 
         return self::$db->lastInsertId();
@@ -51,13 +56,22 @@ class PdoDb
     public function update($arguments)
     {
         $stmt = self::$db->prepare($arguments[0]);
-        $stmt->execute($arguments[1]);
+        foreach ($arguments[1] as $key => $item) {
+            $stmt->bindParam(':' . $key, $item);
+        }
+        return $stmt->execute($arguments[1]);
 
     }
 
     public function delete($arguments)
     {
-        $stmt = $this->db->prepare($arguments[0]);
-        $stmt->execute($arguments[1]);
+        $stmt = self::$db->prepare($arguments[0]);
+        foreach ($arguments[1] as $key => $item) {
+            $stmt->bindParam(':' . $key, $item);
+        }
+        return $stmt->execute($arguments[1]);
+
     }
+
+
 }
