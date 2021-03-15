@@ -13,7 +13,7 @@ class Db
     private static $db_config = [];
     private static $db;
     
-    public function __callStatic($name, $arguments) {
+    public static function __callStatic($name, $arguments) {
         if(!self::$db){
             self::$db = self::init();
         }
